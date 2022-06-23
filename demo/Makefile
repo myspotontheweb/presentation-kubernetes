@@ -14,15 +14,13 @@ RELEASE=$(NAME)
 HELM_PATH=chart
 NAMESPACE=${LOGNAME}
 
-default: build push
+default: build
 
 #
 # Build (using docker)
 #
 build:
 	docker build -t $(REPOSITORY):$(TAG) .
-
-push:
 	docker push $(REPOSITORY):$(TAG)
 
 #
