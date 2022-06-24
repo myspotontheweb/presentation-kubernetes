@@ -6,6 +6,8 @@ actually easy to use. I would submit it's simpler to create and use an AKS clust
 
 This presentation deliberately does not use [Terraform](https://www.terraform.io/) because that is a tool used by SREs to managing infrastructure at scale. It is not a pre-requisite to using/learning Kubernetes.
 
+This presentation does not discuss advanced docker build techniques ([Docker BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/), [Kaniko](https://github.com/GoogleContainerTools/kaniko), [Buildpacks](https://buildpacks.io/)), nor does it delve into tooling that would improve the developer experience ([VSCode support](https://code.visualstudio.com/docs/azure/kubernetes), [Skaffold](https://skaffold.dev/), [Devspace](https://devspace.sh/)). 
+
 In this demo we'll
 
 1. Provision an Azure AKS kubernetes cluster and ACR docker registry
