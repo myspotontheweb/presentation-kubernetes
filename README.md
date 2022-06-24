@@ -1,6 +1,7 @@
 # presentation-kubernetes
 
-This is an intermediate level Kubernetes presentation. 
+This is an intermediate level Kubernetes presentation. It assumes the audience has a basic understanding of what Kubernetes is
+and will show how a cluster can be used by a Developer to build and deploy a docker container.
 
 In this demo we'll
 
