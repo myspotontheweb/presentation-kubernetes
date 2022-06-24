@@ -2,7 +2,7 @@
 
 This presentation assumes the audience has a basic understanding of what is Kubernetes. The intent is to show how a Developer might use Kubernetes
 to build and deploy his/her code. We also want to show how using a managed services like AKS makes Kubernetes a technology that is 
-actually easy to use. I would submit it's simpler to create and use an AKS cluster, than it is to build and deploy Virtual machines. 
+actually easy to use.
 
 This presentation deliberately does not use [Terraform](https://www.terraform.io/) because that is a tool used by SREs to managing infrastructure at scale. It is not a pre-requisite to using/learning Kubernetes.
 
