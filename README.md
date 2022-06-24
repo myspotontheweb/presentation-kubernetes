@@ -89,7 +89,7 @@ Which will run the following docker commands:
 Notes:
 
 * Using the [Docker Buildx plugin](https://docs.docker.com/buildx/working-with-buildx/), which leverages the more powerful [Docker Buildkit engine](https://docs.docker.com/develop/develop-images/build_enhancements/).
-* The first command configures an option remote build that runs on the Kubernetes cluster, which reduces the workload on the local laptop
+* The first command configures an optional remote builder that runs on the Kubernetes cluster. This reduces the workload on the local laptop
 * A remote build can work-around problems where a VPN product (like ZScaler) messes with SSL certs from remote repositories
 
 The docker image name format is as follows:
