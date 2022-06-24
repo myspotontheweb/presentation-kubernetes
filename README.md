@@ -169,7 +169,7 @@ And you can see where the pods are running
     scoil-64dc8fc7b8-tpbbf   1/1     Running   0          16m     10.244.1.4    aks-nodepool1-27971391-vmss000001   <none>           <none>
     scoil-64dc8fc7b8-zq46p   1/1     Running   0          4m56s   10.244.1.5    aks-nodepool1-27971391-vmss000001   <none>           <none>
 
-## Simulate load balancing
+## Simulate load scaling
 
 Reduce the number of pods back to 1
 
