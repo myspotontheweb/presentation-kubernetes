@@ -75,6 +75,111 @@ NOTES:
 * The details of the newly built image is passed as "set" parameters. The image tag changes with each code commit
 * The target namespace is also specified
 
+## Check running pods
+
+Set the namespace to match helm deployment
+
+    kubectl config set-context --current --namespace=mark
+
+Check what's running
+
+    kubectl get all
+
+Sample output
+
+    NAME                         READY   STATUS    RESTARTS   AGE
+    pod/scoil-64dc8fc7b8-tpbbf   1/1     Running   0          4m5s
+        
+    NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+    service/scoil   ClusterIP   10.0.227.184   <none>        8080/TCP   4m5s
+        
+    NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/scoil   1/1     1            1           4m6s
+        
+    NAME                               DESIRED   CURRENT   READY   AGE
+    replicaset.apps/scoil-64dc8fc7b8   1         1         1       4m6s
+        
+    NAME                                        REFERENCE          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   <unknown>/50%   1         100       1          4m6s
+
+NOTES:
+
+* A single pod is running
+* The "service" declaration acts as a DNS loadbalancer within the k8s cluster
+* The deployment object is the controller that manages the pods
+* Each new release will create a replicaset. This is an internal detail to how Deployments work
+* There is also a pod autoscaler, which is configured to scale when the average pod CPU utilization exceeds 50%
+
+
+## Have a look at the output
+
+Start a secure tunnel
+
+    kubectl port-forward service/scoil 8080:8080
+
+and access the website on this link
+
+* http://localhost:8080
+
+## Manually scale up the application
+
+Run 10 pods
+
+    kubectl scale deployment.apps/scoil --replicas=10
+
+What them being created
+
+    $ kubectl get all
+    NAME                         READY   STATUS              RESTARTS   AGE
+    pod/scoil-64dc8fc7b8-7pbk7   1/1     Running             0          6s
+    pod/scoil-64dc8fc7b8-bbmmd   1/1     Running             0          6s
+    pod/scoil-64dc8fc7b8-bd8qf   0/1     ContainerCreating   0          6s
+    pod/scoil-64dc8fc7b8-cg6td   1/1     Running             0          6s
+    pod/scoil-64dc8fc7b8-jm8k4   0/1     ContainerCreating   0          6s
+    pod/scoil-64dc8fc7b8-kqvwd   0/1     ContainerCreating   0          6s
+    pod/scoil-64dc8fc7b8-kzvrw   0/1     ContainerCreating   0          6s
+    pod/scoil-64dc8fc7b8-nnpgb   0/1     ContainerCreating   0          6s
+    pod/scoil-64dc8fc7b8-tpbbf   1/1     Running             0          11m
+    pod/scoil-64dc8fc7b8-zq46p   1/1     Running             0          6s
+    
+    NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+    service/scoil   ClusterIP   10.0.227.184   <none>        8080/TCP   11m
+    
+    NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/scoil   5/10    10           5           11m
+    
+    NAME                               DESIRED   CURRENT   READY   AGE
+    replicaset.apps/scoil-64dc8fc7b8   10        10        5       11m
+    
+    NAME                                        REFERENCE          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   <unknown>/50%   1         100       10         11m
+
+And you can see where the pods are running
+
+    $ kubectl get pods -owide
+    NAME                     READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES
+    scoil-64dc8fc7b8-7pbk7   1/1     Running   0          4m56s   10.244.1.6    aks-nodepool1-27971391-vmss000001   <none>           <none>
+    scoil-64dc8fc7b8-bbmmd   1/1     Running   0          4m56s   10.244.1.8    aks-nodepool1-27971391-vmss000001   <none>           <none>
+    scoil-64dc8fc7b8-bd8qf   1/1     Running   0          4m56s   10.244.0.9    aks-nodepool1-27971391-vmss000000   <none>           <none>
+    scoil-64dc8fc7b8-cg6td   1/1     Running   0          4m56s   10.244.1.7    aks-nodepool1-27971391-vmss000001   <none>           <none>
+    scoil-64dc8fc7b8-jm8k4   1/1     Running   0          4m56s   10.244.0.10   aks-nodepool1-27971391-vmss000000   <none>           <none>
+    scoil-64dc8fc7b8-kqvwd   1/1     Running   0          4m56s   10.244.0.12   aks-nodepool1-27971391-vmss000000   <none>           <none>
+    scoil-64dc8fc7b8-kzvrw   1/1     Running   0          4m56s   10.244.0.8    aks-nodepool1-27971391-vmss000000   <none>           <none>
+    scoil-64dc8fc7b8-nnpgb   1/1     Running   0          4m56s   10.244.0.11   aks-nodepool1-27971391-vmss000000   <none>           <none>
+    scoil-64dc8fc7b8-tpbbf   1/1     Running   0          16m     10.244.1.4    aks-nodepool1-27971391-vmss000001   <none>           <none>
+    scoil-64dc8fc7b8-zq46p   1/1     Running   0          4m56s   10.244.1.5    aks-nodepool1-27971391-vmss000001   <none>           <none>
+
+## Simulate load balancing
+
+Reduce the number of pods back to 1
+
+    kubectl scale deployment.apps/scoil --replicas=1
+
+Start a pod within the cluster
+
+    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080; done"
+
+
 ## Helm chart structure
 
 The Helm homepage contains a [detailed description](https://helm.sh/docs/topics/charts/#the-chart-file-structure) of the Helm chart format

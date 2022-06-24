@@ -10,7 +10,7 @@ CLUSTER=$(NAME)-$(SEQ)
 NODES=2
 
 TAG=$(shell git describe)
-REPOSITORY=$(REGISTRY)/$(PROJECT)/$(NAME)
+REPOSITORY=$(REGISTRY)/$(PROJECT)/$(NAME)$(SEQ)
 RELEASE=$(NAME)
 HELM_PATH=chart
 NAMESPACE=${LOGNAME}
@@ -57,10 +57,10 @@ provision-setup:
 	az group create --name $(RESOURCE_GROUP) --location $(REGION)
 
 provision-registry: provision-setup
-	az acr create --resource-group $(RESOURCE_GROUP) --name $(REGISTRY) --sku Basic
+	az acr create --resource-group $(RESOURCE_GROUP) --name $(NAME)$(SEQ) --sku Basic
 
 provision-aks-cluster:
-	az aks create --resource-group $(RESOURCE_GROUP) --name $(CLUSTER) --node-count $(NODES) --attach-acr $(REGISTRY) 
+	az aks create --resource-group $(RESOURCE_GROUP) --name $(CLUSTER) --node-count $(NODES) --attach-acr $(NAME)$(SEQ) 
 
 #
 # Purge infrastructure
