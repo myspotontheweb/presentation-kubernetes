@@ -75,6 +75,6 @@ provision-aks-cluster:
 #
 # Purge infrastructure
 #
-clean:
+purge:
 	az group delete --name $(RESOURCE_GROUP) --yes --no-wait
 

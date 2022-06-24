@@ -381,7 +381,7 @@ Sample:
 
 Run the demo
 
-    make clean
+    make purge
 
 This will run the following command that will delete all the provisioned infrastructure
 
