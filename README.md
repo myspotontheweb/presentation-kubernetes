@@ -63,7 +63,7 @@ which runs the following commands to build a new docker image and then deploy it
     docker build -t scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528 .
     docker push scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528
 
-    helm upgrade scoil chart \
+    helm upgrade scoil chart --install \
         --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil \
         --set image.tag=v1.0-2-ga36e528 \
         --namespace mark \

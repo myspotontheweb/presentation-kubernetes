@@ -28,7 +28,7 @@ build:
 # Deploy (using helm)
 #
 deploy:
-	helm upgrade $(RELEASE) $(HELM_PATH) --set image.repository=$(REPOSITORY) --set image.tag=$(TAG) --namespace $(NAMESPACE) --create-namespace
+	helm upgrade $(RELEASE) $(HELM_PATH) --install --set image.repository=$(REPOSITORY) --set image.tag=$(TAG) --namespace $(NAMESPACE) --create-namespace
 
 render:
 	helm template $(RELEASE) $(HELM_PATH) --set image.repository=$(REPOSITORY) --set image.tag=$(TAG)
