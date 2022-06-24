@@ -182,16 +182,19 @@ Start a pod within the cluster that will generate lots of requests
 
 Wait for several minutes and you'll observe the pod autoscaler launching additional pods, when the CPU utilization exceeds the desired 20% target:
 
-    $ kubectl get pods,hpa
-    NAME                         READY   STATUS    RESTARTS   AGE
-    pod/load-generator           1/1     Running   0          5m36s
-    pod/scoil-7cc75f8978-57rvk   1/1     Running   0          8m26s
-    pod/scoil-7cc75f8978-7gqz5   1/1     Running   0          11s
-    pod/scoil-7cc75f8978-frfxh   1/1     Running   0          8m37s
-    pod/scoil-7cc75f8978-zmgds   1/1     Running   0          11s
+    $ kubectl get pods,deploy,hpa
+    NAME                         READY   STATUS              RESTARTS   AGE
+    pod/load-generator           1/1     Running             0          90s
+    pod/scoil-7765b8bbf5-5bv95   1/1     Running             0          4m1s
+    pod/scoil-7765b8bbf5-k5lm5   1/1     Running             0          3m51s
+    pod/scoil-7765b8bbf5-nvpd2   0/1     ContainerCreating   0          2s
+    pod/scoil-7765b8bbf5-wcrfj   0/1     ContainerCreating   0          2s
+    
+    NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
+    deployment.apps/scoil   2/4     4            2           69m
     
     NAME                                        REFERENCE          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
-    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   52%/20%   2         100       2          26s
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   53%/20%   2         100       2          29m
 
 Kill the load generator
 
