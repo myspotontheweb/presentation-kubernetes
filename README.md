@@ -182,7 +182,7 @@ Reduce the number of pods back to 2
 
 Start a pod within the cluster
 
-    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080; done"
+    kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080/stress; done"
 
 Wait for several minutes and you'll observe the pod autoscaler launching additional pods, when the CPU utilization exceeds the desired 20% target:
 
