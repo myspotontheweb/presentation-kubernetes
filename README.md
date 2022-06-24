@@ -254,6 +254,11 @@ In practice users will spend their time tweaking existing charts. There are adva
 
 ## Rendered YAML
 
+Unlike tools like [Docker Compose](https://docs.docker.com/compose/), the Kubernetes YAML was never designed for humans to read and edit directly.
+Instead each YAML document represents a Kubernetes API call, this explains its apparent complexity.
+While there are some kubectl commands that will generate Kubernetes objects ("kubectl run", "kubectl expose", etc) generally we use other tools
+to talk to Kubernetes using its API. In this demo we used [Helm](https://helm.sh/)
+
 If you want to look at the generated YAML
 
     make render
