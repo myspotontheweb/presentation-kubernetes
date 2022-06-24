@@ -130,20 +130,22 @@ Check what's running
 
 Sample output
 
+    $ kubectl get all
     NAME                         READY   STATUS    RESTARTS   AGE
-    pod/scoil-64dc8fc7b8-tpbbf   1/1     Running   0          4m5s
-        
-    NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-    service/scoil   ClusterIP   10.0.227.184   <none>        8080/TCP   4m5s
-        
+    pod/scoil-7cc75f8978-52fcr   1/1     Running   0          5m19s
+    pod/scoil-7cc75f8978-5qhhr   1/1     Running   0          5m19s
+    
+    NAME            TYPE        CLUSTER-IP    EXTERNAL-IP   PORT(S)    AGE
+    service/scoil   ClusterIP   10.0.94.193   <none>        8080/TCP   45m
+    
     NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/scoil   1/1     1            1           4m6s
-        
+    deployment.apps/scoil   2/2     2            2           45m
+    
     NAME                               DESIRED   CURRENT   READY   AGE
-    replicaset.apps/scoil-64dc8fc7b8   1         1         1       4m6s
-        
-    NAME                                        REFERENCE          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   <unknown>/50%   1         100       1          4m6s
+    replicaset.apps/scoil-86d6768864   2         2         2       45m
+
+    NAME                                        REFERENCE          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   1%/20%    2         100       2          5m50s
 
 NOTES:
 
@@ -151,8 +153,7 @@ NOTES:
 * The "service" declaration acts as a DNS loadbalancer within the k8s cluster
 * The deployment object is the controller that manages the pods
 * Each new release will create a replicaset. This is an internal detail to how Deployments work
-* There is also a pod autoscaler, which is configured to scale when the average pod CPU utilization exceeds 50%
-
+* There is also a pod autoscaler, which is configured to scale when the average pod CPU utilization exceeds 20%
 
 ## Have a look at the output
 
@@ -163,54 +164,6 @@ Start a secure tunnel
 and access the website on this link
 
 * http://localhost:8080
-
-## Manually scale up the application
-
-Run 10 pods
-
-    kubectl scale deployment.apps/scoil --replicas=10
-
-What them being created
-
-    $ kubectl get all
-    NAME                         READY   STATUS              RESTARTS   AGE
-    pod/scoil-64dc8fc7b8-7pbk7   1/1     Running             0          6s
-    pod/scoil-64dc8fc7b8-bbmmd   1/1     Running             0          6s
-    pod/scoil-64dc8fc7b8-bd8qf   0/1     ContainerCreating   0          6s
-    pod/scoil-64dc8fc7b8-cg6td   1/1     Running             0          6s
-    pod/scoil-64dc8fc7b8-jm8k4   0/1     ContainerCreating   0          6s
-    pod/scoil-64dc8fc7b8-kqvwd   0/1     ContainerCreating   0          6s
-    pod/scoil-64dc8fc7b8-kzvrw   0/1     ContainerCreating   0          6s
-    pod/scoil-64dc8fc7b8-nnpgb   0/1     ContainerCreating   0          6s
-    pod/scoil-64dc8fc7b8-tpbbf   1/1     Running             0          11m
-    pod/scoil-64dc8fc7b8-zq46p   1/1     Running             0          6s
-    
-    NAME            TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-    service/scoil   ClusterIP   10.0.227.184   <none>        8080/TCP   11m
-    
-    NAME                    READY   UP-TO-DATE   AVAILABLE   AGE
-    deployment.apps/scoil   5/10    10           5           11m
-    
-    NAME                               DESIRED   CURRENT   READY   AGE
-    replicaset.apps/scoil-64dc8fc7b8   10        10        5       11m
-    
-    NAME                                        REFERENCE          TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
-    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   <unknown>/50%   1         100       10         11m
-
-And you can see where the pods are running
-
-    $ kubectl get pods -owide
-    NAME                     READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES
-    scoil-64dc8fc7b8-7pbk7   1/1     Running   0          4m56s   10.244.1.6    aks-nodepool1-27971391-vmss000001   <none>           <none>
-    scoil-64dc8fc7b8-bbmmd   1/1     Running   0          4m56s   10.244.1.8    aks-nodepool1-27971391-vmss000001   <none>           <none>
-    scoil-64dc8fc7b8-bd8qf   1/1     Running   0          4m56s   10.244.0.9    aks-nodepool1-27971391-vmss000000   <none>           <none>
-    scoil-64dc8fc7b8-cg6td   1/1     Running   0          4m56s   10.244.1.7    aks-nodepool1-27971391-vmss000001   <none>           <none>
-    scoil-64dc8fc7b8-jm8k4   1/1     Running   0          4m56s   10.244.0.10   aks-nodepool1-27971391-vmss000000   <none>           <none>
-    scoil-64dc8fc7b8-kqvwd   1/1     Running   0          4m56s   10.244.0.12   aks-nodepool1-27971391-vmss000000   <none>           <none>
-    scoil-64dc8fc7b8-kzvrw   1/1     Running   0          4m56s   10.244.0.8    aks-nodepool1-27971391-vmss000000   <none>           <none>
-    scoil-64dc8fc7b8-nnpgb   1/1     Running   0          4m56s   10.244.0.11   aks-nodepool1-27971391-vmss000000   <none>           <none>
-    scoil-64dc8fc7b8-tpbbf   1/1     Running   0          16m     10.244.1.4    aks-nodepool1-27971391-vmss000001   <none>           <none>
-    scoil-64dc8fc7b8-zq46p   1/1     Running   0          4m56s   10.244.1.5    aks-nodepool1-27971391-vmss000001   <none>           <none>
 
 ## Restart the pods
 
@@ -223,15 +176,40 @@ available to serve traffic.
 
 ## Simulate load scaling
 
-Reduce the number of pods back to 1
+Reduce the number of pods back to 2
 
-    kubectl scale deployment.apps/scoil --replicas=1
+    kubectl scale deployment.apps/scoil --replicas=2
 
 Start a pod within the cluster
 
     kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080; done"
 
-> **_NOTE:_**  This demo is not working yet. Need to revise the application to make it more CPU intensive so that we can push it to 50% utilization
+Wait for several minutes and you'll observe the pod autoscaler launching additional pods, when the CPU utilization exceeds the desired 20% target:
+
+    $ kubectl get pods,hpa
+    NAME                         READY   STATUS    RESTARTS   AGE
+    pod/load-generator           1/1     Running   0          5m36s
+    pod/scoil-7cc75f8978-57rvk   1/1     Running   0          8m26s
+    pod/scoil-7cc75f8978-7gqz5   1/1     Running   0          11s
+    pod/scoil-7cc75f8978-frfxh   1/1     Running   0          8m37s
+    pod/scoil-7cc75f8978-zmgds   1/1     Running   0          11s
+    
+    NAME                                        REFERENCE          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   52%/20%   2         100       2          26s
+
+Kill the load generator
+
+    kubectl delete pod/load-generator 
+
+and **eventually** the number of pods will reduce the minimum two.
+
+    $ kubectl get pods,hpa
+    NAME                         READY   STATUS    RESTARTS   AGE
+    pod/scoil-7cc75f8978-frfxh   1/1     Running   0          19m
+    pod/scoil-7cc75f8978-zmgds   1/1     Running   0          11m
+    
+    NAME                                        REFERENCE          TARGETS   MINPODS   MAXPODS   REPLICAS   AGE
+    horizontalpodautoscaler.autoscaling/scoil   Deployment/scoil   1%/20%    2         100       2          11m
 
 ## Helm chart structure
 
