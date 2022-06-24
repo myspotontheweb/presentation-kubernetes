@@ -176,11 +176,7 @@ available to serve traffic.
 
 ## Simulate load scaling
 
-Reduce the number of pods back to 2
-
-    kubectl scale deployment.apps/scoil --replicas=2
-
-Start a pod within the cluster
+Start a pod within the cluster that will generate lots of requests
 
     kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080/stress; done"
 
@@ -249,7 +245,7 @@ If you want to look at the generated YAML
 
 Sample:
 
-    helm template scoil chart --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil --set image.tag=v1.0-2-ga36e528
+    helm template scoil chart --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil1 --set image.tag=v1.0-33-g3566061
     ---
     # Source: scoil/templates/serviceaccount.yaml
     apiVersion: v1
@@ -314,8 +310,8 @@ Sample:
             - name: scoil
               securityContext:
                 {}
-              image: "scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528"
-              imagePullPolicy: IfNotPresent
+              image: "scoil1.azurecr.io/myspotontheweb/scoil1:v1.0-33-g3566061"
+              imagePullPolicy: Always
               ports:
                 - name: http
                   containerPort: 8080
@@ -329,7 +325,12 @@ Sample:
                   path: /
                   port: http
               resources:
-                {}
+                limits:
+                  cpu: 100m
+                  memory: 128Mi
+                requests:
+                  cpu: 100m
+                  memory: 128Mi
     ---
     # Source: scoil/templates/hpa.yaml
     apiVersion: autoscaling/v2beta1
@@ -347,13 +348,13 @@ Sample:
         apiVersion: apps/v1
         kind: Deployment
         name: scoil
-      minReplicas: 1
+      minReplicas: 2
       maxReplicas: 100
       metrics:
         - type: Resource
           resource:
             name: cpu
-            targetAverageUtilization: 50
+            targetAverageUtilization: 20
 
 # Part 5: Cleanup
 
