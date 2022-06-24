@@ -22,7 +22,7 @@ In this demo we'll
 Clone this repo
 
     git clone https://github.com/myspotontheweb/presentation-kubernetes.git
-    cd demo
+    cd presentation-kubernetes/demo
 
 
 # Part 1: Provision an AKS cluster
