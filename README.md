@@ -75,6 +75,24 @@ NOTES:
 * The details of the newly built image is passed as "set" parameters. The image tag changes with each code commit
 * The target namespace is also specified
 
+## Helm chart structure
+
+The Helm homepage contains a [detailed description](https://helm.sh/docs/topics/charts/#the-chart-file-structure) of the Helm chart format
+
+    $ tree demo/chart
+    demo/chart
+    ├── Chart.yaml
+    ├── charts
+    ├── templates
+    │   ├── NOTES.txt
+    │   ├── _helpers.tpl
+    │   ├── deployment.yaml
+    │   ├── hpa.yaml
+    │   ├── ingress.yaml
+    │   ├── service.yaml
+    │   └── serviceaccount.yaml
+    └── values.yaml
+
 ## Rendered YAML
 
 If you want to look at the generated YAML
