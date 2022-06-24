@@ -245,6 +245,13 @@ The Helm homepage contains a [detailed description](https://helm.sh/docs/topics/
     │   └── serviceaccount.yaml
     └── values.yaml
 
+I didn't write this helm chart from scratch. It's easy to generate one as follows:
+
+    helm create scoil
+
+In practice users will spend their time tweaking existing charts. There are advanced usercases where 
+[libray helm charts](https://helm.sh/docs/topics/library_charts/) can be used to standardize helm chart usage and make using helm much easier.
+
 ## Rendered YAML
 
 If you want to look at the generated YAML
