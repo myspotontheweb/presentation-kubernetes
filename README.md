@@ -250,7 +250,7 @@ I didn't write this helm chart from scratch. It's easy to generate one as follow
     helm create scoil
 
 In practice users will spend their time tweaking existing charts. There are advanced usercases where 
-[libray helm charts](https://helm.sh/docs/topics/library_charts/) can be used to standardize helm chart usage and make using helm much easier.
+[libray helm charts](https://helm.sh/docs/topics/library_charts/) can be used to standardize helm chart usage across an organisation.
 
 ## Rendered YAML
 
