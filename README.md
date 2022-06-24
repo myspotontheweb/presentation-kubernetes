@@ -6,7 +6,7 @@ actually easy to use.
 
 This presentation deliberately does not use [Terraform](https://www.terraform.io/) because that is a tool used by SREs to managing infrastructure at scale. It is not a pre-requisite to using/learning Kubernetes.
 
-This presentation does not discuss advanced docker build techniques ([Docker BuildKit](https://docs.docker.com/develop/develop-images/build_enhancements/), [Kaniko](https://github.com/GoogleContainerTools/kaniko), [Buildpacks](https://buildpacks.io/)), nor does it delve into tooling that would improve the developer experience ([VSCode support](https://code.visualstudio.com/docs/azure/kubernetes), [Skaffold](https://skaffold.dev/), [Devspace](https://devspace.sh/)). 
+This presentation does not discuss alternative docker build techniques ([Podman](https://podman.io/), [Kaniko](https://github.com/GoogleContainerTools/kaniko), [Buildpacks](https://buildpacks.io/)), nor does it delve into tooling that would improve the developer experience ([VSCode support](https://code.visualstudio.com/docs/azure/kubernetes), [Skaffold](https://skaffold.dev/), [Devspace](https://devspace.sh/)). 
 
 In this demo we'll
 
@@ -78,12 +78,19 @@ Make sure docker is running
 
 Run the demo
 
-    make build
+    make build-setup build
 
-Which will run the following docker commands
+Which will run the following docker commands:
 
-    docker build -t scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528 .
-    docker push scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528
+    docker buildx create --name scoil-builder --driver kubernetes --driver-opt replicas=1,namespace=builders --use
+    kubectl create ns builders
+    docker buildx build --tag  scoil1.azurecr.io/myspotontheweb/scoil1:v1.0-27-gb98678e --push .
+
+Notes:
+
+* Using the [Docker Buildx plugin](https://docs.docker.com/buildx/working-with-buildx/), which leverages the more powerful [Docker Buildkit engine](https://docs.docker.com/develop/develop-images/build_enhancements/).
+* The first command configures an option remote build that runs on the Kubernetes cluster, which reduces the workload on the local laptop
+* A remote build can work-around problems where a VPN product (like ZScaler) messes with SSL certs from remote repositories
 
 The docker image name format is as follows:
 
@@ -97,14 +104,13 @@ Run the demo
 
 which runs the following commands to build a new docker image and then deploy it using helm
 
-    docker build -t scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528 .
-    docker push scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528
-
+    docker buildx build --tag  scoil1.azurecr.io/myspotontheweb/scoil1:v1.0-27-gb98678e --push .
+    
     helm upgrade scoil chart --install \
-        --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil \
-        --set image.tag=v1.0-2-ga36e528 \
-        --namespace mark \
-        --create-namespace
+       --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil1 \
+       --set image.tag=v1.0-27-gb98678e \
+       --namespace mark \
+       --create-namespace
 
 NOTES:
 
