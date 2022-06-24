@@ -23,6 +23,7 @@ In this demo we'll
 ## Required software
 
 * Azure subscription
+* Windows WSL2 using Ubuntu 
 * Docker CE
 * Azure cli
 * kubectl cli
