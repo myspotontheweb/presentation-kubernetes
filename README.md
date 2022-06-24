@@ -1,6 +1,29 @@
 # presentation-kubernetes
 
-Intermediate presentation of Kubernetes
+This is an intermediate level Kubernetes presentation. 
+
+In this demo we'll
+
+1. Provision an Azure AKS kubernetes cluster and ACR docker registry
+1. Show how to access the cluster and registry
+1. Build and push a Docker container image
+1. Deploy a container to AKS using helm. Demonstrate additional capabilities such as scaling
+1. Purge provisioned infrastructure
+
+## Required software
+
+* Azure subscription
+* Azure cli
+* kubectl cli
+* helm cli
+
+## How to get started?
+
+Clone this repo
+
+    git clone https://github.com/myspotontheweb/presentation-kubernetes.git
+    cd demo
+
 
 # Part 1: Provision an AKS cluster
 
