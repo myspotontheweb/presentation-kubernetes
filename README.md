@@ -265,6 +265,7 @@ If you want to look at the generated YAML
 
 Sample:
 
+    helm template scoil chart --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil --set image.tag=v1.0-2-ga36e528
     ---
     # Source: scoil/templates/serviceaccount.yaml
     apiVersion: v1
