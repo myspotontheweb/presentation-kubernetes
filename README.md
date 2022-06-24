@@ -17,7 +17,27 @@ which will run the following commands that will provision an Azure ACR registry 
 
 The last command will take approx 5 mins to run so be patient
 
-# Part 2: Build and push a Docker container image
+# Part 2: Login to the cluster and registry
+
+Run the demo
+
+    make creds
+
+which will run the following commands
+
+    az aks get-credentials --resource-group scoil-1 --name scoil-1
+    az acr login --name scoil1.azurecr.io
+
+NOTES:
+
+* The first command will populate the ~/.kube/config file with connection details for the cluster
+* The second command simulates a "docker login" so that images can be pushed to the ACR registry
+
+Make sure docker is running
+
+    sudo service docker start
+
+# Part 3: Build and push a Docker container image
 
 Run the demo
 
@@ -32,7 +52,7 @@ The docker image name format is as follows:
 
     <registry>/<project>/<name>:<tag>
 
-# Part 3: Deploy container image to AKS using helm
+# Part 4: Deploy container(s) to AKS using helm
 
 Run the demo
 
@@ -42,12 +62,17 @@ which runs the following commands to build a new docker image and then deploy it
 
     docker build -t scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528 .
     docker push scoil1.azurecr.io/myspotontheweb/scoil:v1.0-2-ga36e528
-    helm upgrade scoil chart --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil --set image.tag=v1.0-2-ga36e528 --namespace mark --create-namespace
+
+    helm upgrade scoil chart \
+        --set image.repository=scoil1.azurecr.io/myspotontheweb/scoil \
+        --set image.tag=v1.0-2-ga36e528 \
+        --namespace mark \
+        --create-namespace
 
 NOTES:
 
 * Helm is a tool for generating the Kubernetes API YAML
-* The details of the newly built image is passed as parameters
+* The details of the newly built image is passed as "set" parameters. The image tag changes with each code commit
 * The target namespace is also specified
 
 ## Rendered YAML
@@ -163,7 +188,7 @@ Sample:
             name: cpu
             targetAverageUtilization: 50
 
-# Part 4: Cleanup
+# Part 5: Cleanup
 
 Run the demo
 
