@@ -11,6 +11,11 @@ In this demo we'll
 1. Deploy a container to AKS using helm. Demonstrate additional capabilities such as scaling
 1. Purge provisioned infrastructure
 
+## Recommened reading
+
+* [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/)
+* [Kubernetes Documentation](https://kubernetes.io/docs)
+
 ## Required software
 
 * Azure subscription
