@@ -13,6 +13,7 @@ In this demo we'll
 ## Required software
 
 * Azure subscription
+* Docker CE
 * Azure cli
 * kubectl cli
 * helm cli
