@@ -162,3 +162,14 @@ Sample:
           resource:
             name: cpu
             targetAverageUtilization: 50
+
+# Part 4: Cleanup
+
+Run the demo
+
+    make clean
+
+This will run the following command that will delete all the provisioned infrastructure
+
+    az group delete --name scoil-1 --yes --no-wait
+
