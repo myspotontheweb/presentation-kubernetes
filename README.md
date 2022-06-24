@@ -223,6 +223,7 @@ Start a pod within the cluster
 
     kubectl run -i --tty load-generator --rm --image=busybox:1.28 --restart=Never -- /bin/sh -c "while sleep 0.01; do wget -q -O- http://scoil:8080; done"
 
+> **_NOTE:_**  This demo is not working yet. Need to revise the application to make it more CPU intensive so that we can push it to 50% utilization
 
 ## Helm chart structure
 
