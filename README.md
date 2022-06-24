@@ -15,6 +15,7 @@ In this demo we'll
 
 * [Azure Kubernetes Service (AKS)](https://docs.microsoft.com/en-us/azure/aks/)
 * [Kubernetes Documentation](https://kubernetes.io/docs)
+* [Helm](https://helm.sh/docs/)
 
 ## Required software
 
@@ -198,6 +199,15 @@ And you can see where the pods are running
     scoil-64dc8fc7b8-nnpgb   1/1     Running   0          4m56s   10.244.0.11   aks-nodepool1-27971391-vmss000000   <none>           <none>
     scoil-64dc8fc7b8-tpbbf   1/1     Running   0          16m     10.244.1.4    aks-nodepool1-27971391-vmss000001   <none>           <none>
     scoil-64dc8fc7b8-zq46p   1/1     Running   0          4m56s   10.244.1.5    aks-nodepool1-27971391-vmss000001   <none>           <none>
+
+## Restart the pods
+
+The best way to restart pods is to tell the Deployment object to perform a rolling restart of each pod as follows:
+
+    kubectl rollout restart deployment/scoil
+
+This will play "whack-a-mole" slowing terminating old pods and gradually creating new ones. This strategy means there is always pod
+available to serve traffic. 
 
 ## Simulate load scaling
 
