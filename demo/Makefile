@@ -11,6 +11,7 @@ NODES=2
 
 TAG=$(shell git describe)
 REPOSITORY=$(REGISTRY)/$(PROJECT)/$(NAME)$(SEQ)
+BUILDER_NAMESPACE=builders
 RELEASE=$(NAME)
 HELM_PATH=chart
 NAMESPACE=${LOGNAME}
@@ -18,11 +19,20 @@ NAMESPACE=${LOGNAME}
 default: build
 
 #
-# Build (using docker)
+# Build (using Docker Buildkit)
+#
+# Note:
+# The "build-setup" target will optionally configure a builder running on the k8s cluster
 #
 build:
-	docker build -t $(REPOSITORY):$(TAG) .
-	docker push $(REPOSITORY):$(TAG)
+	docker buildx build --tag  $(REPOSITORY):$(TAG) --push .
+
+build-setup:
+	docker buildx create --name $(NAME)-builder --driver kubernetes --driver-opt replicas=1,namespace=$(BUILDER_NAMESPACE) --use
+	kubectl create ns $(BUILDER_NAMESPACE)
+
+build-clean:
+	docker buildx rm $(NAME)-builder
 
 #
 # Deploy (using helm)
